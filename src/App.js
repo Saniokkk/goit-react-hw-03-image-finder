@@ -1,23 +1,32 @@
 import { SearchBar } from "./Components/Searchbar";
 import { ImageGallery } from "Components/ImageGallery";
-import style from "./App.module.css";
 import { Component } from "react";
+import { searchQuery } from "API/searchQuery";
+import style from "./App.module.css";
 
 class App extends Component {
   state = {
-    name: "",
-    value: "",
+    response: [],
+    search: "",
+    page: 1,
   };
 
-  handleChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value });
+  handleSubmit = (event) => {
+    event.preventDefault();
+    console.log(event);
+    // this.setState(() => {
+    //   return { search: event }
+    // });
+    this.setState(() => {
+      return { response: searchQuery(this.state.search, this.state.page) };
+    });
   };
 
   render() {
     return (
       <div className={style.App}>
-        <SearchBar handleChange={this.handleChange} />
-        <ImageGallery />
+        <SearchBar onSubmit={this.handleSubmit} />
+        <ImageGallery imageList={this.state.response} />
       </div>
     );
   }
