@@ -4,24 +4,29 @@ import style from "./SearchForm.module.css";
 
 export class SearchForm extends Component {
   state = {
-    search: "",
+    searchValue: "",
   };
 
   handleChange = (event) => {
-    console.log(this.props.onSubmit());
-    this.setState({ search: event.target.value });
+    this.setState({ searchValue: event.target.value });
+  };
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+    this.props.onSubmit(this.state.searchValue);
+    this.setState({ searchValue: "" });
   };
 
   render() {
     return (
-      <form className={style.searchForm} onSubmit={this.props.onSubmit}>
+      <form className={style.searchForm} onSubmit={this.handleSubmit}>
         <button type="submit" className={style.searchFormButton}>
           <span className={style.searchFormButtonLabel}>Search</span>
         </button>
 
         <input
           className={style.searchFormInput}
-          value={this.state.search}
+          value={this.state.searchValue}
           type="text"
           autoComplete="off"
           autoFocus
