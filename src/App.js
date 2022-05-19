@@ -1,3 +1,4 @@
+import { ToastContainer } from "react-toastify";
 import { SearchBar } from "./Components/Searchbar";
 import { ImageGallery } from "Components/ImageGallery";
 import { Component } from "react";
@@ -9,6 +10,7 @@ class App extends Component {
   };
 
   changeSearchSubmit = (searchValue) => {
+    this.setState({ searchValue: "" });
     this.setState({ searchValue }, () => {
       console.log(this.state.searchValue, "<---");
     });
@@ -19,6 +21,7 @@ class App extends Component {
       <div className={style.App}>
         <SearchBar onSubmit={this.changeSearchSubmit} />
         <ImageGallery searchValue={this.state.searchValue} />
+        <ToastContainer />
       </div>
     );
   }
