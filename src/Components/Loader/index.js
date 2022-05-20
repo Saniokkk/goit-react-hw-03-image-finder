@@ -1,1 +1,1 @@
-export { NotFound } from "./Loader.jsx";
+export { Loader } from "./Loader.jsx";
