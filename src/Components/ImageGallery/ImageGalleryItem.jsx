@@ -1,15 +1,19 @@
 import style from "./ImageGalleryItem.module.css";
 
 export const ImageGalleryItem = (props) => {
-  const { url, name, largeImageURL, openModal } = props;
+  const { webformatURL, tags, largeImageURL } = props.data;
+
+  const openLargeImg = () => {
+    props.openModal(largeImageURL, tags);
+  };
+
   return (
     <li className={style.ImageGalleryItem}>
       <img
         className={style.ImageGalleryItemImage}
-        src={url}
-        alt={name}
-        onClick={openModal}
-        data-url={largeImageURL}
+        src={webformatURL}
+        alt={tags}
+        onClick={openLargeImg}
       />
     </li>
   );

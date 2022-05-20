@@ -10,7 +10,6 @@ class App extends Component {
   };
 
   changeSearchSubmit = (searchValue) => {
-    this.setState({ searchValue: "" }, () => console.log("Обнуление"));
     this.setState({ searchValue }, () => {
       console.log(this.state.searchValue, "<---");
     });

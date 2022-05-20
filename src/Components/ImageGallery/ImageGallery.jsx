@@ -1,10 +1,9 @@
-import { toast } from "react-toastify";
 import { ImageGalleryItem } from "./ImageGalleryItem";
 import { Component } from "react";
 import { searchQuery } from "API/searchQuery";
 import { ButtonLoadMore } from "../Button";
 import { Modal } from "../Modal";
-import { NotFound } from "../Loader";
+// import { NotFound } from "../Loader";
 import style from "./ImageGallery.module.css";
 const PER_PAGE = 12;
 
@@ -15,12 +14,15 @@ export class ImageGallery extends Component {
     page: 1,
     button: false,
     showModal: false,
+    largeImageURL: null,
+    tags: null,
     // status:
   };
 
   async componentDidMount() {
     console.log(this.state);
-    console.log(PER_PAGE);
+
+    console.log(this.state.showModal);
   }
 
   componentWillUnmount() {
@@ -30,11 +32,6 @@ export class ImageGallery extends Component {
   }
 
   async componentDidUpdate(prevProps, prevState) {
-    // console.log(prevProps, "prevProps")
-    // console.log(this.props, "THIS PROPS")
-    // console.log(prevState, "prevState")
-    // console.log(this.state, "THIS STATE")
-
     if (prevProps.searchValue !== this.props.searchValue) {
       const data = await searchQuery(
         this.props.searchValue,
@@ -44,17 +41,12 @@ export class ImageGallery extends Component {
       if (data.total === 0) {
         alert("По вашему запросу ничего не найдено");
       } else {
-        this.setState(
-          {
-            responseBySearch: [...data.hits],
-            searchValue: this.props.searchValue,
-            button: true,
-            page: 1,
-          },
-          () => {
-            console.log(this.state);
-          }
-        );
+        this.setState({
+          responseBySearch: [...data.hits],
+          searchValue: this.props.searchValue,
+          button: true,
+          page: 1,
+        });
         window.scrollTo(0, 0);
       }
     }
@@ -91,32 +83,33 @@ export class ImageGallery extends Component {
     });
   };
 
-  toggleModal() {
-    console.log("www");
-    // this.setState({showModal: this.state.showModal});
-  }
+  toggleModal = (url, tags) => {
+    this.setState({ showModal: !this.state.showModal, largeImageURL: url });
+  };
 
   render() {
+    const { showModal, largeImageURL, tags, responseBySearch, button } =
+      this.state;
     return (
       <>
-        {this.state.showModal && (
-          <Modal toggleModal={this.toggleModal}>{<div>Modal</div>}</Modal>
+        {showModal && (
+          <Modal toggleModal={this.toggleModal}>
+            {<img src={largeImageURL} alt={tags}></img>}
+          </Modal>
         )}
         <ul className={style.imageGallery}>
-          {this.state.responseBySearch &&
-            this.state.responseBySearch.map((data) => {
+          {responseBySearch &&
+            responseBySearch.map((data) => {
               return (
                 <ImageGalleryItem
                   key={data.id}
-                  url={data.webformatURL}
-                  largeImageURL={data.largeImageURL}
-                  name={data.title}
+                  data={{ ...data }}
                   openModal={this.toggleModal}
                 />
               );
             })}
         </ul>
-        {this.state.button && (
+        {button && (
           <ButtonLoadMore text={"Load more"} onClick={this.handleLoadMore} />
         )}
       </>

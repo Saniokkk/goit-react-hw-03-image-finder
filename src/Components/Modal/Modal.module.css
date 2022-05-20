@@ -16,12 +16,6 @@
 }
 
 .modal {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 80%;
-  height: 80%;
   max-width: calc(100vw - 48px);
   max-height: calc(100vh - 24px);
-  background: rgb(246, 243, 243);
 }
