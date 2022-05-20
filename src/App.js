@@ -10,7 +10,7 @@ class App extends Component {
   };
 
   changeSearchSubmit = (searchValue) => {
-    this.setState({ searchValue: "" });
+    this.setState({ searchValue: "" }, () => console.log("Обнуление"));
     this.setState({ searchValue }, () => {
       console.log(this.state.searchValue, "<---");
     });
@@ -21,7 +21,17 @@ class App extends Component {
       <div className={style.App}>
         <SearchBar onSubmit={this.changeSearchSubmit} />
         <ImageGallery searchValue={this.state.searchValue} />
-        <ToastContainer />
+        <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </div>
     );
   }

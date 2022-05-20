@@ -3,6 +3,8 @@ import { ImageGalleryItem } from "./ImageGalleryItem";
 import { Component } from "react";
 import { searchQuery } from "API/searchQuery";
 import { ButtonLoadMore } from "../Button";
+import { Modal } from "../Modal";
+import { NotFound } from "../Loader";
 import style from "./ImageGallery.module.css";
 const PER_PAGE = 12;
 
@@ -12,20 +14,19 @@ export class ImageGallery extends Component {
     responseBySearch: null,
     page: 1,
     button: false,
-  };
-
-  handleLoad = async () => {
-    this.setState(
-      (prevState) => {
-        return { page: prevState.page + 1 };
-      },
-      () => console.log(this.state.page)
-    );
+    showModal: false,
+    // status:
   };
 
   async componentDidMount() {
     console.log(this.state);
     console.log(PER_PAGE);
+  }
+
+  componentWillUnmount() {
+    this.setState({ page: 1 }, () => {
+      console.log(this.state.page);
+    });
   }
 
   async componentDidUpdate(prevProps, prevState) {
@@ -74,7 +75,7 @@ export class ImageGallery extends Component {
             button: false,
             responseBySearch: [...this.state.responseBySearch, ...data.hits],
           },
-          () => alert("По вашему запросу картинок больше нет!!!")
+          () => console.log("По вашему запросу картинок больше нет!!!")
         );
         return;
       }
@@ -84,15 +85,23 @@ export class ImageGallery extends Component {
     }
   }
 
-  componentWillUnmount() {
-    this.setState({ page: 1 }, () => {
-      console.log(this.state.page);
+  handleLoadMore = async () => {
+    this.setState((prevState) => {
+      return { page: prevState.page + 1 };
     });
+  };
+
+  toggleModal() {
+    console.log("www");
+    // this.setState({showModal: this.state.showModal});
   }
 
   render() {
     return (
       <>
+        {this.state.showModal && (
+          <Modal toggleModal={this.toggleModal}>{<div>Modal</div>}</Modal>
+        )}
         <ul className={style.imageGallery}>
           {this.state.responseBySearch &&
             this.state.responseBySearch.map((data) => {
@@ -101,13 +110,14 @@ export class ImageGallery extends Component {
                   key={data.id}
                   url={data.webformatURL}
                   largeImageURL={data.largeImageURL}
-                  title={data.title}
+                  name={data.title}
+                  openModal={this.toggleModal}
                 />
               );
             })}
         </ul>
         {this.state.button && (
-          <ButtonLoadMore text={"Load more"} onClick={this.handleLoad} />
+          <ButtonLoadMore text={"Load more"} onClick={this.handleLoadMore} />
         )}
       </>
     );

@@ -1,4 +1,5 @@
 // import { render } from "@testing-library/react";
+import { toast } from "react-toastify";
 import { Component } from "react";
 import style from "./SearchForm.module.css";
 
@@ -13,6 +14,10 @@ export class SearchForm extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
+    if (this.state.searchValue.trim() === "") {
+      alert("Введите данные для поиска");
+      return;
+    }
     this.props.onSubmit(this.state.searchValue);
     this.setState({ searchValue: "" });
   };
