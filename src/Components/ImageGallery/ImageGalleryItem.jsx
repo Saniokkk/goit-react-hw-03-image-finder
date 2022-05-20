@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import style from "./ImageGalleryItem.module.css";
 
 export const ImageGalleryItem = (props) => {
@@ -17,4 +18,9 @@ export const ImageGalleryItem = (props) => {
       />
     </li>
   );
+};
+
+ImageGalleryItem.propTypes = {
+  data: PropTypes.object.isRequired,
+  openModal: PropTypes.func,
 };

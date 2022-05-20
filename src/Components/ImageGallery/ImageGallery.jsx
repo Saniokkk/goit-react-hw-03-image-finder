@@ -1,6 +1,6 @@
-import { ImageGalleryItem } from "./ImageGalleryItem";
-// import { toast } from "react-toastify";
 import { Component } from "react";
+import PropTypes from "prop-types";
+import { ImageGalleryItem } from "./ImageGalleryItem";
 import { searchQuery } from "API/searchQuery";
 import { ButtonLoadMore } from "../Button";
 import { Modal } from "../Modal";
@@ -9,6 +9,10 @@ import style from "./ImageGallery.module.css";
 const PER_PAGE = 12;
 
 export class ImageGallery extends Component {
+  static propTypes = {
+    searchValue: PropTypes.string,
+  };
+
   state = {
     searchValue: "",
     responseBySearch: null,

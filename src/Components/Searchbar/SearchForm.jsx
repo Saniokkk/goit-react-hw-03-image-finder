@@ -1,8 +1,13 @@
 // import { render } from "@testing-library/react";
+import PropTypes from "prop-types";
 import { Component } from "react";
 import style from "./SearchForm.module.css";
 
 export class SearchForm extends Component {
+  static propTypes = {
+    onSubmit: PropTypes.func.isRequired,
+  };
+
   state = {
     searchValue: "",
   };
