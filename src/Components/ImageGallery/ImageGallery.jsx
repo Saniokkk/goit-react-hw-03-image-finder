@@ -24,8 +24,9 @@ export class ImageGallery extends Component {
     status: "idle",
   };
 
-  async componentDidMount() {
-    console.log(this.state);
+  componentDidMount() {
+    console.log(this.state.searchValue);
+    console.log(this.props.searchValue);
   }
 
   componentWillUnmount() {
@@ -34,9 +35,12 @@ export class ImageGallery extends Component {
 
   async componentDidUpdate(prevProps, prevState) {
     if (prevProps.searchValue !== this.props.searchValue) {
+      this.setState({ searchValue: this.props.searchValue, page: 1 });
+    }
+    if (prevState.searchValue !== this.state.searchValue) {
       this.setState({ status: "pending" });
       const data = await searchQuery(
-        this.props.searchValue,
+        this.state.searchValue,
         this.state.page,
         PER_PAGE
       );
@@ -47,7 +51,6 @@ export class ImageGallery extends Component {
           responseBySearch: [...data.hits],
           searchValue: this.props.searchValue,
           button: true,
-          page: 1,
           status: "resolve",
         });
         window.scrollTo(0, 0);
@@ -55,11 +58,11 @@ export class ImageGallery extends Component {
     }
 
     if (
-      prevProps.searchValue === this.state.searchValue &&
+      prevState.searchValue === this.state.searchValue &&
       prevState.page !== this.state.page
     ) {
       const data = await searchQuery(
-        this.props.searchValue,
+        this.state.searchValue,
         this.state.page,
         PER_PAGE
       );
@@ -75,6 +78,11 @@ export class ImageGallery extends Component {
         responseBySearch: [...this.state.responseBySearch, ...data.hits],
         status: "resolve",
       });
+      console.log("V=V      P !=  P");
+      console.log(
+        `${prevProps.searchValue} = ${this.props.searchValue}   ${prevState.page} != ${this.state.page}`
+      );
+      return;
     }
   }
 
